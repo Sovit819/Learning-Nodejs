@@ -23,7 +23,7 @@ app.use(express.urlencoded({
 app.use(express.static("public"));
 app.use(cookieParser());
 
-app.use("/api/user", userRoutes);
+app.use("/api/v1/users", userRoutes);
 
 app.use(errorHandler)
 

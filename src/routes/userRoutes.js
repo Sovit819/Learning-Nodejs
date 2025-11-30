@@ -1,13 +1,24 @@
 import express from "express";
-import { createUser, getAllUsers, getUserById, updateUser, softDeleteUser, hardDeleteUser } from "../controllers/userController.js";
+import {
+    createUser,
+    loginUser,
+    logoutUser,
+    getAllUsers,
+    getUserById,
+    updateUser,
+    softDeleteUser,
+    hardDeleteUser,
+} from "../controllers/userController.js";
 import { verifyJWT } from "../middlewares/Authentication.js";
 import { isAdmin, isAdminOrManagerOrSelf } from "../middlewares/Authorization.js";
 
 const router = express.Router();
 
-router.route("/create-user").post(createUser);
+router.route("/register").post(createUser);
+router.route("/login").post(loginUser);
 
-router.route("/users").get(verifyJWT, getAllUsers);
+router.route("/logout").post(verifyJWT, logoutUser);
+router.route("/allUsers").get(verifyJWT, getAllUsers);
 router.route("/get-user/:_id").get(verifyJWT, getUserById);
 router.route("/update-user/:_id").put(verifyJWT, updateUser);
 router.route("/delete-user/:_id").delete(verifyJWT, isAdminOrManagerOrSelf, softDeleteUser);

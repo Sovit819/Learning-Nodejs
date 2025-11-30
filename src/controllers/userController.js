@@ -184,3 +184,22 @@ export const loginUser = asyncHandler( async (req, res) => {
     .cookie("refreshToken", refreshToken, cookieOptions)
     .json(new ApiResponse(200, {user:loggedInUser, accessToken}, "Login successful"));
 })
+
+// logout
+export const logoutUser = asyncHandler(async(req, res)=> {
+    const user = await User.findByIdAndUpdate(req.user._id,
+        {$set: {refreshToken: null}},
+        {new: true}
+    )
+
+    const options ={
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict"
+    }
+
+    return res
+    .status(200)
+    .clearCookie("refreshToken", options)
+    .json(new ApiResponse(200, {}, "User logged out successfully"))
+})
